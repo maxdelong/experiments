@@ -7,6 +7,8 @@ name = "pypi"
 requests = "*"
 ipykernel = "*"
 wikipedia = "*"
+duckduckgo-search = "*"
+praw = "*"
 
 [dev-packages]
 
