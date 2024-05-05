@@ -9,6 +9,7 @@ ipykernel = "*"
 wikipedia = "*"
 duckduckgo-search = "*"
 praw = "*"
+pandas = "*"
 
 [dev-packages]
 
