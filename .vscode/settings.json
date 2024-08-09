@@ -1,0 +1,7 @@
+{
+    "python.testing.pytestArgs": [
+        "word_game_solvers"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
+}
