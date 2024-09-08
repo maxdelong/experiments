@@ -1,42 +1,51 @@
-# Example file showing a circle moving on screen
 import pygame
-import os
-# pygame setup
+import sys
+from tower_defense_game.tower import Tower
+from tower_defense_game.enemy import Enemy
+
+# Initialize Pygame
 pygame.init()
-screen = pygame.display.set_mode((1280, 1280))
-clock = pygame.time.Clock()
-running = True
-dt = 0
 
-player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
-background_path = './src/data/forest.png'
-surface = pygame.image.load(background_path).convert()
+# Set up the game window
+screen_width = 800
+screen_height = 600
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Tower Defense Game")
 
-while running:
-    # poll for events
-    # pygame.QUIT event means the user clicked X to close your window
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+# Main game loop
+def main():
+    clock = pygame.time.Clock()
+    tower = Tower((400, 300), range=150, damage=20, cooldown=500)
+    enemies = [Enemy((50, 50), health=100, speed=2)]
+    target_position = (750, 550)
 
-    screen.blit(surface, (0,0))
+    while True:
+        current_time = pygame.time.get_ticks()
 
-    pygame.draw.circle(screen, "red", player_pos, 40)
-    player_pos = pygame.mouse.get_pos()
-    keys = pygame.key.get_pressed()
-    # if keys[pygame.K_w]:
-    #     player_pos.y -= 300 * dt
-    # if keys[pygame.K_s]:
-    #     player_pos.y += 300 * dt
-    # if keys[pygame.K_a]:
-    #     player_pos.x -= 300 * dt
-    # if keys[pygame.K_d]:
-    #     player_pos.x += 300 * dt
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
 
-    # flip() the display to put your work on screen
-    pygame.display.flip()
+        screen.fill((0, 100, 0))
 
-    # limits FPS to 60
-    # dt is delta time in seconds since last frame, used for framerate-
-    # independent physics.
-    dt = clock.tick(60) / 1000
+        # Update and draw enemies
+        for enemy in enemies:
+            enemy.move(target_position)
+            if enemy.alive:
+                enemy.draw(screen)
+            else:
+                enemies.remove(enemy)
+
+        # Tower attacks enemies
+        tower.shoot(enemies, current_time)
+
+        # Draw tower
+        tower.draw(screen)
+
+        pygame.display.flip()
+        clock.tick(60)
+
+
+if __name__ == "__main__":
+    main()
